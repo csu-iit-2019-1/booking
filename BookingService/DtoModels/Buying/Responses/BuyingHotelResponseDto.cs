@@ -1,7 +1,7 @@
 ﻿namespace BookingService.DtoModels.Buying.Responses
 {
-    public class BuyingHotelResponseDto
+    public class BuyingHotelResponseDto : BuyingResponseDto
     {
-        public string Status { get; }
+        
     }
 }

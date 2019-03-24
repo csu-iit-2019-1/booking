@@ -1,9 +1,8 @@
 ﻿namespace BookingService.DtoModels.Buying.Responses
 {
-    public class BuyingEventResponseDto
+    public class BuyingEventResponseDto : BuyingResponseDto
     {
         public int BuyingId { get; }
-        public int BookingId { get; }
-        public string Status { get; }
+        public int BookingId { get; }        
     }
 }

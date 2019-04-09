@@ -4,10 +4,12 @@ namespace BookingService.DtoModels
 {
     public class RouteDto
     {
-        public int Id { get; }
-        public List<TransportDto> Transports { get; }
-        public List<HotelDto> Hotels { get; }
-        public List<EventDto> Events { get; }   
-        public UserInfoDto UserInfo { get; }
+        public int Id { get; set; }
+        public int PersonId { get; set; }
+        public List<TransportDto> Transports { get; set; }
+        public List<HotelDto> Hotels { get; set; }
+        public List<EventDto> Events { get; set; }
+        public int CountOfPersonsAdults { get; set; }
+        public int CountOfPersonsChildren { get; set; }
     }
 }

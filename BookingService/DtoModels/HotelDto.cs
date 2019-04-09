@@ -1,17 +1,20 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace BookingService.DtoModels
 {
     public class HotelDto
     {
-        public int HotelId;
-        public string Name { get; }
-        public string City { get; }
-        public int Apartaments { get; }
-        public double Price { get; }
-        public string Description { get; }
-        public double Raiting { get; }
-        public List<string> PhotoUrls { get; }
-        public List<string> Reviews { get; }
+        public int HotelId { get; set; }
+        public string Name { get; set; }
+        public string City { get; set; }
+        public int Apartaments { get; set; }
+        public double Price { get; set; }
+        public string Description { get; set; }
+        public double Raiting { get; set; }
+        public List<string> PhotoUrls { get; set; }
+        public List<string> Reviews { get; set; }
+        public DateTime DateDeparture { get; set; }
+        public DateTime DateArrive { get; set; }
     }
 }

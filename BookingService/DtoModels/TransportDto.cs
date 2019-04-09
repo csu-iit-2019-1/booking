@@ -4,12 +4,12 @@ namespace BookingService.DtoModels
 {
     public class TransportDto
     {      
-        public int TransportId { get; }
-        public string FlightInfo { get; }
-        public List<Sit> Sits {get;}
-        public int StartPoint { get; }
-        public int EndPoint { get; }
-        public int DepartureTime { get; }
-        public int ArriveTime { get; }
+        public int TransportId { get; set; }
+        public string FlightInfo { get; set; }
+        public List<Sit> Sits { get; set; }
+        public int StartPoint { get; set; }
+        public int EndPoint { get; set; }
+        public int DepartureTime { get; set; }
+        public int ArriveTime { get; set; }
     }
 }

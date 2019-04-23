@@ -1,4 +1,5 @@
-﻿using BookingService.DtoModels;
+﻿using BookingService.Common;
+using BookingService.DtoModels;
 using BookingService.DtoModels.Booking;
 using BookingService.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -17,10 +18,7 @@ namespace BookingService.Controllers
     {
         private BookingDB _db;
         private static HttpClient _client = new HttpClient();
-        private const string HOTEL_URL = "http://localhost:6001/api/booking/";
-        private const string TRANSPORT_URL = "http://localhost:6001/api/booking/";
-        private const string EVENT_URL = "http://localhost:6001/api/booking/";
-
+       
         public BookingController(BookingDB db)
         {
             _db = db;
@@ -59,7 +57,7 @@ namespace BookingService.Controllers
 
             foreach (HotelDto hotel in route.Hotels)
             {
-                var hotelUrl = HOTEL_URL + hotel.HotelId.ToString();
+                var hotelUrl = BookingServiceUrls.HOTEL_URL + hotel.HotelId.ToString();
 
                 var data = new BookingHotelDto
                 {
@@ -93,7 +91,7 @@ namespace BookingService.Controllers
 
             foreach (TransportDto transport in route.Transports)
             {
-                var transportUrl = TRANSPORT_URL + transport.TransportId.ToString();
+                var transportUrl = BookingServiceUrls.TRANSPORT_URL + transport.TransportId.ToString();
 
                 var data = new BookingTransportDto
                 {
@@ -126,7 +124,7 @@ namespace BookingService.Controllers
 
             foreach (EventDto ev in route.Events)
             {
-                var eventUrl = EVENT_URL + ev.EventId.ToString();
+                var eventUrl = BookingServiceUrls.EVENT_URL + ev.EventId.ToString();
 
                 var data = new BookingEventDto
                 {

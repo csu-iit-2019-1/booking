@@ -9,40 +9,40 @@ using System.Threading.Tasks;
 
 namespace BookingService.Services.Buying
 {
-    public class BuyTransport
+    public class BuyEvent
     {
         private readonly static HttpClient _client = new HttpClient();
         private BookingDB _db;
 
-        public BuyTransport(BookingDB db)
+        public BuyEvent(BookingDB db)
         {
             _db = db;
         }
 
-        public async Task<bool> BuyTransportAsync(int userId)
+        public async Task<bool> BuyEVentAsync(int userId)
         {
-            var transportKey = (userId, BookingType.Transport);
-            var bookingTransportIds = _db.Find(transportKey);
+            var eventKey = (userId, BookingType.Transport);
+            var eventlKeyIds = _db.Find(eventKey);
             var isBuying = true;
 
-            foreach (var id in bookingTransportIds)
+            foreach (var id in eventlKeyIds)
             {
-                var transportServiceUrl = BuyingServiceUrls.TRANSPORT_URL;
-                var transportData = new TransportDto()
+                var hotelServiceUrl = BuyingServiceUrls.EVENT_URL;
+                var hotelData = new EventDto()
                 {
                     Id = id
                 };
 
-                var body = JsonConvert.SerializeObject(transportData); 
-                var response = await _client.PostAsync(transportServiceUrl, new StringContent(body, Encoding.UTF8, "application/json"));
+                var body = JsonConvert.SerializeObject(hotelData);
+                var response = await _client.PostAsync(hotelServiceUrl, new StringContent(body, Encoding.UTF8, "application/json"));
 
                 if (response.StatusCode != HttpStatusCode.OK)
                 {
-                   return false;
+                    return false;
                 }
                 else
                 {
-                    _db.Remove(transportKey);
+                    _db.Remove(eventKey);
                 }
             }
 

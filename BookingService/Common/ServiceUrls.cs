@@ -9,8 +9,8 @@
 
     public struct BuyingServiceUrls
     {
-        public const string HOTEL_URL = "http://localhost:6001/api/buying/";
-        public const string TRANSPORT_URL = "http://localhost:6001/api/buying/";
-        public const string EVENT_URL = "http://localhost:6001/api/buying/";
+        public const string HOTEL_URL = "http://localhost:6001/api/buying/hotel";
+        public const string TRANSPORT_URL = "http://localhost:6001/api/buying/transport";
+        public const string EVENT_URL = "http://localhost:6001/api/buying/event";
     }
 }

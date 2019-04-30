@@ -21,29 +21,38 @@ namespace BookingService.Services.Buying
 
         public async Task<bool> BuyHotelAsync(int userId)
         {
-            var hotelKey = (userId, BookingType.Transport);
+            var hotelKey = (userId, BookingType.Hotel);
             var hotelKeyIds = _db.Find(hotelKey);
             var isBuying = true;
 
-            foreach (var id in hotelKeyIds)
+            if (hotelKeyIds != null)
             {
-                var hotelServiceUrl = BuyingServiceUrls.HOTEL_URL;
-                var hotelData = new HotelDto()
+                foreach (var id in hotelKeyIds)
                 {
-                    Id = id
-                };
+                    var hotelServiceUrl = BuyingServiceUrls.HOTEL_URL;
+                    var hotelData = new HotelDto()
+                    {
+                        BookingId = id
+                    };
 
-                var body = JsonConvert.SerializeObject(hotelData);
-                var response = await _client.PostAsync(hotelServiceUrl, new StringContent(body, Encoding.UTF8, "application/json"));
+                    var body = JsonConvert.SerializeObject(hotelData);
+                    var response = await _client.PostAsync(hotelServiceUrl, new StringContent(body, Encoding.UTF8, "application/json"));
 
-                if (response.StatusCode != HttpStatusCode.OK)
-                {
-                    return false;
+                    var responseData = await response.Content.ReadAsStringAsync();
+
+                    if (responseData == "Buyoted")
+                    {
+                        isBuying = true;
+                        _db.Remove(hotelKey);
+                    }
+                    else
+                    {
+                        isBuying = false;
+                    }
                 }
-                else
-                {
-                    _db.Remove(hotelKey);
-                }
+            }    else
+            {
+                isBuying = false;
             }
 
             return isBuying;

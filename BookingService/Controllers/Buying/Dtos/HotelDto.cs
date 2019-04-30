@@ -2,6 +2,6 @@
 {
     public class HotelDto
     {
-        public int Id { get; set; }
+        public int BookingId { get; set; }
     }
 }

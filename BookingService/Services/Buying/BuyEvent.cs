@@ -2,7 +2,6 @@
 using BookingService.Controllers.Buying.Dtos;
 using BookingService.Models;
 using Newtonsoft.Json;
-using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,29 +20,39 @@ namespace BookingService.Services.Buying
 
         public async Task<bool> BuyEVentAsync(int userId)
         {
-            var eventKey = (userId, BookingType.Transport);
+            var eventKey = (userId, BookingType.Event);
             var eventlKeyIds = _db.Find(eventKey);
             var isBuying = true;
 
-            foreach (var id in eventlKeyIds)
+            if (eventlKeyIds != null)
             {
-                var hotelServiceUrl = BuyingServiceUrls.EVENT_URL;
-                var hotelData = new EventDto()
+                foreach (var id in eventlKeyIds)
                 {
-                    Id = id
-                };
+                    var hotelServiceUrl = BuyingServiceUrls.EVENT_URL;
+                    var hotelData = new EventDto()
+                    {
+                        BookingId = id
+                    };
 
-                var body = JsonConvert.SerializeObject(hotelData);
-                var response = await _client.PostAsync(hotelServiceUrl, new StringContent(body, Encoding.UTF8, "application/json"));
+                    var body = JsonConvert.SerializeObject(hotelData);
+                    var response = await _client.PostAsync(hotelServiceUrl, new StringContent(body, Encoding.UTF8, "application/json"));
 
-                if (response.StatusCode != HttpStatusCode.OK)
-                {
-                    return false;
+                    var responseData = await response.Content.ReadAsAsync<bool>();
+
+                    if (responseData == true)
+                    {
+                        isBuying = true;
+                        _db.Remove(eventKey);
+                    }
+                    else
+                    {
+                        isBuying = false;
+                    }
                 }
-                else
-                {
-                    _db.Remove(eventKey);
-                }
+            }
+            else
+            {
+                isBuying = false;
             }
 
             return isBuying;

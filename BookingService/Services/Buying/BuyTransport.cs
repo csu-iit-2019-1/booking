@@ -2,7 +2,6 @@
 using BookingService.Controllers.Buying.Dtos;
 using BookingService.Models;
 using Newtonsoft.Json;
-using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,25 +24,35 @@ namespace BookingService.Services.Buying
             var bookingTransportIds = _db.Find(transportKey);
             var isBuying = true;
 
-            foreach (var id in bookingTransportIds)
+            if (bookingTransportIds != null)
             {
-                var transportServiceUrl = BuyingServiceUrls.TRANSPORT_URL;
-                var transportData = new TransportDto()
+                foreach (var id in bookingTransportIds)
                 {
-                    Id = id
-                };
+                    var transportServiceUrl = BuyingServiceUrls.TRANSPORT_URL;
+                    var transportData = new TransportDto()
+                    {
+                        Id = id
+                    };
 
-                var body = JsonConvert.SerializeObject(transportData); 
-                var response = await _client.PostAsync(transportServiceUrl, new StringContent(body, Encoding.UTF8, "application/json"));
+                    var body = JsonConvert.SerializeObject(transportData);
+                    var response = await _client.PostAsync(transportServiceUrl, new StringContent(body, Encoding.UTF8, "application/json"));
 
-                if (response.StatusCode != HttpStatusCode.OK)
-                {
-                   return false;
+                    var responseData = await response.Content.ReadAsAsync<bool>();
+
+                    if (responseData == true)
+                    {
+                        isBuying = true;
+                        _db.Remove(transportKey);
+                    }
+                    else
+                    {
+                        isBuying = false;
+                    }
                 }
-                else
-                {
-                    _db.Remove(transportKey);
-                }
+            }
+            else
+            {
+                isBuying = false;
             }
 
             return isBuying;

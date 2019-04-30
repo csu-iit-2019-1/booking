@@ -2,6 +2,6 @@
 {
     public class TransportDto
     {
-        public int Id { get; set; }
+        public int BookingId { get; set; }
     }
 }

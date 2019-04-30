@@ -31,7 +31,7 @@ namespace BookingService.Services.Buying
                     var transportServiceUrl = BuyingServiceUrls.TRANSPORT_URL;
                     var transportData = new TransportDto()
                     {
-                        Id = id
+                        BookingId = id
                     };
 
                     var body = JsonConvert.SerializeObject(transportData);

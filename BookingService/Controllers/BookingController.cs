@@ -25,19 +25,12 @@ namespace BookingService.Controllers
         {
             var booking = new Models.BookingService(_db);
             var transportStatusCode = await booking.BookingTransports(route);
-            //var hotelStatusCode = await booking.BookingHotels(route);
+            var hotelStatusCode = await booking.BookingHotels(route);
             var eventStatusCode = await booking.BookingEvents(route);
 
-            //if (transportStatusCode == HttpStatusCode.ServiceUnavailable ||
-            //    hotelStatusCode == HttpStatusCode.ServiceUnavailable ||
-            //    eventStatusCode == HttpStatusCode.ServiceUnavailable)
-            //{
-            //    return StatusCode(503);
-            //}
-
             if (transportStatusCode == HttpStatusCode.ServiceUnavailable ||
-               
-               eventStatusCode == HttpStatusCode.ServiceUnavailable)
+                hotelStatusCode == HttpStatusCode.ServiceUnavailable ||
+                eventStatusCode == HttpStatusCode.ServiceUnavailable)
             {
                 return StatusCode(503);
             }

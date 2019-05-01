@@ -1,7 +1,9 @@
 ﻿using BookingService.Controllers.Buying.Dtos;
 using BookingService.Models;
-using BookingService.Services.Buying;
+using BookingService.Services.BuyingService;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -20,30 +22,25 @@ namespace BookingService.Controllers.Buying
         }
 
         [HttpPost]
-        [Route("transport")]
-        public async Task<bool> BuyTransportAsync([FromBody] UserDto dto)
+        [Route("buyout")]
+        public async Task<bool> Buyout([FromBody] UserDto dto)
         {
+            var isBuyed = true;
+
             var buyTransport = new BuyTransport(_db);
+            var buyHotel = new BuyHotel(_db);
+            var buyEvent = new BuyEvent(_db);
 
-            return await buyTransport.BuyTransportAsync(dto.UserId);
-        }
+            var responseFromTransportService = await buyTransport.BuyTransportAsync(dto.UserId);
+            var responseFromHotelService = await buyHotel.BuyHotelAsync(dto.UserId);
+            var responseFromEventService = await buyEvent.BuyEventAsync(dto.UserId);
 
-        [HttpPost]
-        [Route("hotel")]
-        public async Task<bool> BuyHotelAsync([FromBody] UserDto dto)
-        {
-            var buyTransport = new BuyHotel(_db);
+            if(!responseFromTransportService || !responseFromHotelService || !responseFromEventService)
+            {
+                isBuyed = false;
+            }
 
-            return await buyTransport.BuyHotelAsync(dto.UserId);
-        }
-
-        [HttpPost]
-        [Route("event")]
-        public async Task<bool> BuyEventAsync([FromBody] UserDto dto)
-        {
-            var buyTransport = new BuyTransport(_db);
-
-            return await buyTransport.BuyTransportAsync(dto.UserId);
+            return isBuyed;
         }
     }
 }

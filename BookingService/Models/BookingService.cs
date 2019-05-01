@@ -1,7 +1,9 @@
 ﻿using BookingService.Common;
 using BookingService.DtoModels;
 using BookingService.DtoModels.Booking;
+using BookingService.Services.LoggingrService;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
@@ -14,6 +16,7 @@ namespace BookingService.Models
     {
         private BookingDB _db;
         private static HttpClient _client = new HttpClient();
+        private Logger logger = new Logger();
 
         public BookingService(BookingDB db)
         {
@@ -21,7 +24,9 @@ namespace BookingService.Models
         }
 
         public async Task<HttpStatusCode> BookingHotels(RouteDto route)
-        {
+        {            
+            await logger.WriteLogAsync($"{DateTime.Now} - A request has come for booking a hotels");
+
             var bookingIds = new List<int>();
 
             foreach (HotelDto hotel in route.Hotels)
@@ -45,6 +50,7 @@ namespace BookingService.Models
                 }
                 catch (HttpRequestException)
                 {
+                    await logger.WriteLogAsync($"{DateTime.Now} - Hotel service is not available");
                     return HttpStatusCode.ServiceUnavailable;
                 }
             }
@@ -52,11 +58,14 @@ namespace BookingService.Models
             var key = (route.PersonId, BookingType.Hotel);
             _db.AddOrUpdate(key, bookingIds);
 
+            await logger.WriteLogAsync($"{DateTime.Now} - The hotel booking data is preserved in the database");
             return HttpStatusCode.OK;
         }
 
         public async Task<HttpStatusCode> BookingTransports(RouteDto route)
         {
+            await logger.WriteLogAsync($"{DateTime.Now} - A request has come for booking a transports");
+
             var bookingIds = new List<int>();
 
             foreach (TransportDto transport in route.Transports)
@@ -76,19 +85,23 @@ namespace BookingService.Models
                     bookingIds.Add(bookingId);
                 }
                 catch (HttpRequestException)
-            {
-                return HttpStatusCode.ServiceUnavailable;
+                {
+                    await logger.WriteLogAsync($"{DateTime.Now} - Transport service is not available");
+                    return HttpStatusCode.ServiceUnavailable;
+                }
             }
-        }
 
             var key = (route.PersonId, BookingType.Transport);
             _db.AddOrUpdate(key, bookingIds);
 
+            await logger.WriteLogAsync($"{DateTime.Now} - The transport booking data is preserved in the database");
             return HttpStatusCode.OK;
         }
 
         public async Task<HttpStatusCode> BookingEvents(RouteDto route)
         {
+            await logger.WriteLogAsync($"{DateTime.Now} - A request has come for booking a events");
+
             var bookingIds = new List<int>();
 
             foreach (EventDto ev in route.Events)
@@ -110,6 +123,7 @@ namespace BookingService.Models
                 }
                 catch (HttpRequestException)
                 {
+                    await logger.WriteLogAsync($"{DateTime.Now} - Event service is not available");
                     return HttpStatusCode.ServiceUnavailable;
                 }
             }
@@ -117,6 +131,7 @@ namespace BookingService.Models
             var key = (route.PersonId, BookingType.Event);
             _db.AddOrUpdate(key, bookingIds);
 
+            await logger.WriteLogAsync($"{DateTime.Now} - The event booking data is preserved in the database");
             return HttpStatusCode.OK;
         }
 

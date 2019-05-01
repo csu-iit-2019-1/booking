@@ -1,3 +1,9 @@
 5/1/2019 5:43:25 PM - Transport purchase service triggered
 5/1/2019 5:43:25 PM - Hotel purchase service triggered
 5/1/2019 5:43:25 PM - Event purchase service triggered
+01.05.2019 20:45:48 - A request has come for booking a transports
+01.05.2019 20:45:48 - The transport booking data is preserved in the database
+01.05.2019 20:45:48 - A request has come for booking a hotels
+01.05.2019 20:45:49 - The hotel booking data is preserved in the database
+01.05.2019 20:45:49 - A request has come for booking a events
+01.05.2019 20:45:59 - The event booking data is preserved in the database

@@ -1,13 +1,14 @@
 ﻿using BookingService.Common;
 using BookingService.Controllers.Buying.Dtos;
 using BookingService.Models;
+using BookingService.Services.LoggingrService;
 using Newtonsoft.Json;
-using System.Net;
+using System;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BookingService.Services.Buying
+namespace BookingService.Services.BuyingService
 {
     public class BuyHotel
     {
@@ -21,11 +22,14 @@ namespace BookingService.Services.Buying
 
         public async Task<bool> BuyHotelAsync(int userId)
         {
+            var logger = new Logger();
+            await logger.WriteLogAsync($"{DateTime.Now} - Hotel purchase service triggered");
+
             var hotelKey = (userId, BookingType.Hotel);
             var hotelKeyIds = _db.Find(hotelKey);
             var isBuying = true;
 
-            if (hotelKeyIds != null)
+            if (hotelKeyIds.Count != 0)
             {
                 foreach (var id in hotelKeyIds)
                 {
@@ -38,19 +42,21 @@ namespace BookingService.Services.Buying
                     var body = JsonConvert.SerializeObject(hotelData);
                     var response = await _client.PostAsync(hotelServiceUrl, new StringContent(body, Encoding.UTF8, "application/json"));
 
-                    var responseData = await response.Content.ReadAsStringAsync();
-
-                    if (responseData == "Buyoted")
+                    //var responseData = await response.Content.ReadAsStringAsync();
+                    var responseData = await response.Content.ReadAsAsync<bool>();
+                    //if (responseData == "Buyoted")
+                    if (responseData == true)
                     {
                         isBuying = true;
-                        _db.Remove(hotelKey);
+                        //_db.Remove(hotelKey);
                     }
                     else
                     {
                         isBuying = false;
                     }
                 }
-            }    else
+            }
+            else
             {
                 isBuying = false;
             }

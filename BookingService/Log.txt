@@ -1,0 +1,3 @@
+5/1/2019 5:43:25 PM - Transport purchase service triggered
+5/1/2019 5:43:25 PM - Hotel purchase service triggered
+5/1/2019 5:43:25 PM - Event purchase service triggered

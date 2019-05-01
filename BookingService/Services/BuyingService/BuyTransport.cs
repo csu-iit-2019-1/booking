@@ -1,12 +1,14 @@
 ﻿using BookingService.Common;
 using BookingService.Controllers.Buying.Dtos;
 using BookingService.Models;
+using BookingService.Services.LoggingrService;
 using Newtonsoft.Json;
+using System;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BookingService.Services.Buying
+namespace BookingService.Services.BuyingService
 {
     public class BuyTransport
     {
@@ -20,15 +22,18 @@ namespace BookingService.Services.Buying
 
         public async Task<bool> BuyTransportAsync(int userId)
         {
+            var logger = new Logger();
+            await logger.WriteLogAsync($"{DateTime.Now} - Transport purchase service triggered");
+
             var transportKey = (userId, BookingType.Transport);
             var bookingTransportIds = _db.Find(transportKey);
             var isBuying = true;
 
-            if (bookingTransportIds != null)
+            if (bookingTransportIds.Count != 0)
             {
                 foreach (var id in bookingTransportIds)
                 {
-                    var transportServiceUrl = BuyingServiceUrls.TRANSPORT_URL;
+                    var transportServiceUrl = BuyingServiceUrls.TRANSPORT_URL + id;
                     var transportData = new TransportDto()
                     {
                         BookingId = id

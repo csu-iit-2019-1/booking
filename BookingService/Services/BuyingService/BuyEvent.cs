@@ -1,30 +1,36 @@
 ﻿using BookingService.Common;
 using BookingService.Controllers.Buying.Dtos;
 using BookingService.Models;
+using BookingService.Services.LoggingrService;
 using Newtonsoft.Json;
+using System;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BookingService.Services.Buying
+namespace BookingService.Services.BuyingService
 {
     public class BuyEvent
     {
         private readonly static HttpClient _client = new HttpClient();
         private BookingDB _db;
 
-        public BuyEvent(BookingDB db)
+        public BuyEvent(
+            BookingDB db)
         {
             _db = db;
         }
 
-        public async Task<bool> BuyEVentAsync(int userId)
+        public async Task<bool> BuyEventAsync(int userId)
         {
+            var logger = new Logger();
+            await logger.WriteLogAsync($"{DateTime.Now} - Event purchase service triggered");
+
             var eventKey = (userId, BookingType.Event);
             var eventlKeyIds = _db.Find(eventKey);
             var isBuying = true;
 
-            if (eventlKeyIds != null)
+            if (eventlKeyIds.Count != 0)
             {
                 foreach (var id in eventlKeyIds)
                 {

@@ -4,10 +4,10 @@ namespace BookingService.DtoModels.Booking
 {
     public class BookingHotelDto
     {
-        public int HotelId { get; set; }
-        public int PersonId { get; set; }
-        public DateTime DateDeparture { get; set; }
-        public DateTime DateArrive { get; set; }
-        public int CountOfPersons { get; set; }
+        public int hotelId { get; set; }
+        public int personId { get; set; }
+        public DateTime dateDeparture { get; set; }
+        public DateTime dateArrive { get; set; }
+        public int countOfPersons { get; set; }
     }
 }

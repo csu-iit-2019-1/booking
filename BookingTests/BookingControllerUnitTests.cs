@@ -1,6 +1,5 @@
 using BookingService.DtoModels;
 using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
@@ -11,12 +10,12 @@ namespace BookingTests
 {
     public class BookingControllerUnitTests
     {
+        HttpClient httpClient = new HttpClient();
+        string bookingUrl = "https://csubookingservice.azurewebsites.net/booking/route";        
+
         [Fact]
         public async void RouteSuccess()
-        {
-            var httpClient = new HttpClient();
-            var bookingUrl = "http://localhost:5000/booking/route";
-
+        {  
             var route = new RouteDto
             {
                 Id = 100,
@@ -25,12 +24,12 @@ namespace BookingTests
                 {
                     new HotelDto
                     {
-                        HotelId = 100,
+                        HotelId = 1,
                         Name = "New Hotel"
                     },
                     new HotelDto
                     {
-                        HotelId = 101,
+                        HotelId = 2,
                         Name = "Райское Наслаждение"
                     }
                 },
@@ -38,19 +37,19 @@ namespace BookingTests
                 {
                     new TransportDto
                     {
-                        TransportId = 200,                        
+                        TransportId = 1,                        
                     }
                 },
                 Events = new List<EventDto>()
                 {
                     new EventDto
                     {
-                        EventId = 300,
+                        EventId = 1,
                         Name = "Rock concert"
                     },
                     new EventDto
                     {
-                        EventId = 301,
+                        EventId = 2,
                         Name = "Opera"
                     }
                 },
@@ -60,8 +59,9 @@ namespace BookingTests
 
             var body = JsonConvert.SerializeObject(route);            
             var response = await httpClient.PostAsync(bookingUrl, new StringContent(body, Encoding.UTF8, "application/json"));
+            var content = response.Content.ReadAsStringAsync();
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        }
+        }        
     }
 }

@@ -2,9 +2,8 @@
 {
     public class BookingEventDto
     {
-        public int EventId { get; set; }
-        public int UserId { get; set; }
-        public int CountOfPersonsAdults { get; set; }
-        public int CountOfPersonsChildren { get; set; }
+        public int userId { get; set; }
+        public int countOfPersonsAdults { get; set; }
+        public int countOfPersonsChildren { get; set; }
     }
 }

@@ -35,14 +35,14 @@ namespace BookingService.Services.BuyingService
             {
                 foreach (var id in eventlKeyIds)
                 {
-                    var hotelServiceUrl = BuyingServiceUrls.EVENT_URL;
+                    var eventServiceUrl = BuyingServiceUrls.EVENT_URL;
                     var hotelData = new EventDto()
                     {
                         BookingId = id
                     };
 
                     var body = JsonConvert.SerializeObject(hotelData);
-                    var response = await _client.PostAsync(hotelServiceUrl, new StringContent(body, Encoding.UTF8, "application/json"));
+                    var response = await _client.PostAsync(eventServiceUrl, new StringContent(body, Encoding.UTF8, "application/json"));
 
                     var responseData = false;
                     if (response.StatusCode == HttpStatusCode.OK)

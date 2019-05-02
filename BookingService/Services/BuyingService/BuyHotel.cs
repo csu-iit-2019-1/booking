@@ -37,11 +37,11 @@ namespace BookingService.Services.BuyingService
                     var hotelServiceUrl = BuyingServiceUrls.HOTEL_URL;
                     var hotelData = new HotelDto()
                     {
-                        BookingId = id
+                        bookingId = id
                     };
 
                     var body = JsonConvert.SerializeObject(hotelData);
-                    var response = await _client.PostAsync(hotelServiceUrl, new StringContent(body, Encoding.UTF8, "application/json"));
+                    var response = await _client.PutAsync(hotelServiceUrl, new StringContent(body, Encoding.UTF8, "application/json"));
 
                     var responseData = "";
                     if (response.StatusCode == HttpStatusCode.OK)

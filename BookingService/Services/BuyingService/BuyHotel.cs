@@ -30,35 +30,42 @@ namespace BookingService.Services.BuyingService
             var hotelKeyIds = _db.Find(hotelKey);
             var isBuying = true;
 
-            if (hotelKeyIds.Count != 0)
+            if (hotelKeyIds != null)
             {
-                foreach (var id in hotelKeyIds)
+                if (hotelKeyIds.Count != 0)
                 {
-                    var hotelServiceUrl = BuyingServiceUrls.HOTEL_URL;
-                    var hotelData = new HotelDto()
+                    foreach (var id in hotelKeyIds)
                     {
-                        BookingId = id
-                    };
+                        var hotelServiceUrl = BuyingServiceUrls.HOTEL_URL;
+                        var hotelData = new HotelDto()
+                        {
+                            BookingId = id
+                        };
 
-                    var body = JsonConvert.SerializeObject(hotelData);
-                    var response = await _client.PutAsync(hotelServiceUrl, new StringContent(body, Encoding.UTF8, "application/json"));
+                        var body = JsonConvert.SerializeObject(hotelData);
+                        var response = await _client.PutAsync(hotelServiceUrl, new StringContent(body, Encoding.UTF8, "application/json"));
 
-                    var responseData = false;
-                    if (response.StatusCode == HttpStatusCode.OK)
-                    {
-                        dynamic a = JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync());
-                        responseData = a.status;
-                    }
+                        var responseData = false;
+                        if (response.StatusCode == HttpStatusCode.OK)
+                        {
+                            dynamic a = JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync());
+                            responseData = a.status;
+                        }
 
-                    if (responseData == true)
-                    {
-                        isBuying = true;
-                        _db.Remove(hotelKey);
+                        if (responseData == true)
+                        {
+                            isBuying = true;
+                            _db.Remove(hotelKey);
+                        }
+                        else
+                        {
+                            isBuying = false;
+                        }
                     }
-                    else
-                    {
-                        isBuying = false;
-                    }
+                }
+                else
+                {
+                    isBuying = false;
                 }
             }
             else

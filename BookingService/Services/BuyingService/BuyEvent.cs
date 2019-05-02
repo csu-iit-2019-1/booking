@@ -31,41 +31,47 @@ namespace BookingService.Services.BuyingService
             var eventlKeyIds = _db.Find(eventKey);
             var isBuying = true;
 
-            if (eventlKeyIds.Count != 0)
+            if (eventlKeyIds != null)
             {
-                foreach (var id in eventlKeyIds)
+                if (eventlKeyIds.Count != 0)
                 {
-                    var eventServiceUrl = BuyingServiceUrls.EVENT_URL;
-                    var hotelData = new EventDto()
+                    foreach (var id in eventlKeyIds)
                     {
-                        BookingId = id
-                    };
+                        var eventServiceUrl = BuyingServiceUrls.EVENT_URL;
+                        var hotelData = new EventDto()
+                        {
+                            BookingId = id
+                        };
 
-                    var body = JsonConvert.SerializeObject(hotelData);
-                    var response = await _client.PostAsync(eventServiceUrl, new StringContent(body, Encoding.UTF8, "application/json"));
+                        var body = JsonConvert.SerializeObject(hotelData);
+                        var response = await _client.PostAsync(eventServiceUrl, new StringContent(body, Encoding.UTF8, "application/json"));
 
-                    var responseData = "";
-                    if (response.StatusCode == HttpStatusCode.OK)
-                    {
-                        responseData = await response.Content.ReadAsStringAsync();
-                    }
+                        var responseData = "";
+                        if (response.StatusCode == HttpStatusCode.OK)
+                        {
+                            responseData = await response.Content.ReadAsStringAsync();
+                        }
 
-                    if (responseData == "true")
-                    {
-                        isBuying = true;
-                        _db.Remove(eventKey);
+                        if (responseData == "true")
+                        {
+                            isBuying = true;
+                            _db.Remove(eventKey);
+                        }
+                        else
+                        {
+                            isBuying = false;
+                        }
                     }
-                    else
-                    {
-                        isBuying = false;
-                    }
+                }
+                else
+                {
+                    isBuying = false;
                 }
             }
             else
             {
                 isBuying = false;
             }
-
             return isBuying;
         }
     }

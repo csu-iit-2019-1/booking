@@ -30,34 +30,41 @@ namespace BookingService.Services.BuyingService
             var bookingTransportIds = _db.Find(transportKey);
             var isBuying = true;
 
-            if (bookingTransportIds.Count != 0)
+            if (bookingTransportIds != null)
             {
-                foreach (var id in bookingTransportIds)
+                if (bookingTransportIds.Count != 0)
                 {
-                    var transportServiceUrl = BuyingServiceUrls.TRANSPORT_URL + id;
-                    var transportData = new TransportDto()
+                    foreach (var id in bookingTransportIds)
                     {
-                        BookingId = id
-                    };
+                        var transportServiceUrl = BuyingServiceUrls.TRANSPORT_URL + id;
+                        var transportData = new TransportDto()
+                        {
+                            BookingId = id
+                        };
 
-                    var body = JsonConvert.SerializeObject(transportData);
-                    var response = await _client.PostAsync(transportServiceUrl, new StringContent(body, Encoding.UTF8, "application/json"));
+                        var body = JsonConvert.SerializeObject(transportData);
+                        var response = await _client.GetAsync(transportServiceUrl);
 
-                    var responseData = "";
-                    if (response.StatusCode == HttpStatusCode.OK)
-                    {
-                        responseData = await response.Content.ReadAsStringAsync();
-                    }
+                        var responseData = "";
+                        if (response.StatusCode == HttpStatusCode.OK)
+                        {
+                            responseData = await response.Content.ReadAsStringAsync();
+                        }
 
-                    if (responseData == "true" || responseData == "True")
-                    {
-                        isBuying = true;
-                        _db.Remove(transportKey);
+                        if (responseData == "true" || responseData == "True")
+                        {
+                            isBuying = true;
+                            _db.Remove(transportKey);
+                        }
+                        else
+                        {
+                            isBuying = false;
+                        }
                     }
-                    else
-                    {
-                        isBuying = false;
-                    }
+                }
+                else
+                {
+                    isBuying = false;
                 }
             }
             else

@@ -1,6 +1,7 @@
 ﻿using BookingService.DtoModels;
 using BookingService.Models;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -21,9 +22,10 @@ namespace BookingService.Controllers
 
         [HttpPost]
         [Route("route")]
-        public async Task<IActionResult> Route([FromBody] RouteDto route)
+        public async Task<int> Route([FromBody] RouteDto route)
         {
             var booking = new Models.BookingService(_db);
+            var randomizer = new Random();
             var transportStatusCode = await booking.BookingTransports(route);
             var hotelStatusCode = await booking.BookingHotels(route);
             var eventStatusCode = await booking.BookingEvents(route);
@@ -32,10 +34,10 @@ namespace BookingService.Controllers
                 hotelStatusCode == HttpStatusCode.ServiceUnavailable ||
                 eventStatusCode == HttpStatusCode.ServiceUnavailable)
             {
-                return StatusCode(503);
-            }
+                return 0;
+            }                        
 
-            return StatusCode(200);
+            return randomizer.Next(1,100);
         }
     }
 }

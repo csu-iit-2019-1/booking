@@ -43,14 +43,13 @@ namespace BookingService.Services.BuyingService
                     var body = JsonConvert.SerializeObject(transportData);
                     var response = await _client.PostAsync(transportServiceUrl, new StringContent(body, Encoding.UTF8, "application/json"));
 
-                    var responseData = true;
-                    //if (response.StatusCode == HttpStatusCode.OK)
-                    //{
-                    //    dynamic a = JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync());
-                    //    responseData = a.status;
-                    //}
+                    var responseData = "";
+                    if (response.StatusCode == HttpStatusCode.OK)
+                    {
+                        responseData = await response.Content.ReadAsStringAsync();
+                    }
 
-                    if (responseData == true)
+                    if (responseData == "true" || responseData == "True")
                     {
                         isBuying = true;
                         _db.Remove(transportKey);

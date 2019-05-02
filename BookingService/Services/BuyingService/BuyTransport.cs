@@ -43,12 +43,12 @@ namespace BookingService.Services.BuyingService
                     var body = JsonConvert.SerializeObject(transportData);
                     var response = await _client.PostAsync(transportServiceUrl, new StringContent(body, Encoding.UTF8, "application/json"));
 
-                    var responseData = false;
-                    if (response.StatusCode == HttpStatusCode.OK)
-                    {
-                        dynamic a = JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync());
-                        responseData = a.status;
-                    }
+                    var responseData = true;
+                    //if (response.StatusCode == HttpStatusCode.OK)
+                    //{
+                    //    dynamic a = JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync());
+                    //    responseData = a.status;
+                    //}
 
                     if (responseData == true)
                     {

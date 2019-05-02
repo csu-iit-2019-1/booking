@@ -4,6 +4,7 @@ using BookingService.Models;
 using BookingService.Services.LoggingrService;
 using Newtonsoft.Json;
 using System;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -43,7 +44,11 @@ namespace BookingService.Services.BuyingService
                     var body = JsonConvert.SerializeObject(hotelData);
                     var response = await _client.PostAsync(hotelServiceUrl, new StringContent(body, Encoding.UTF8, "application/json"));
 
-                    var responseData = await response.Content.ReadAsAsync<bool>();
+                    var responseData = false;
+                    if (response.StatusCode == HttpStatusCode.OK)
+                    {
+                        responseData = await response.Content.ReadAsAsync<bool>();
+                    }
 
                     if (responseData == true)
                     {

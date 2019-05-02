@@ -4,6 +4,7 @@ using BookingService.Models;
 using BookingService.Services.LoggingrService;
 using Newtonsoft.Json;
 using System;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -34,16 +35,20 @@ namespace BookingService.Services.BuyingService
             {
                 foreach (var id in eventlKeyIds)
                 {
-                    var hotelServiceUrl = BuyingServiceUrls.EVENT_URL;
+                    var eventServiceUrl = BuyingServiceUrls.EVENT_URL;
                     var hotelData = new EventDto()
                     {
                         BookingId = id
                     };
 
                     var body = JsonConvert.SerializeObject(hotelData);
-                    var response = await _client.PostAsync(hotelServiceUrl, new StringContent(body, Encoding.UTF8, "application/json"));
+                    var response = await _client.PostAsync(eventServiceUrl, new StringContent(body, Encoding.UTF8, "application/json"));
 
-                    var responseData = await response.Content.ReadAsAsync<bool>();
+                    var responseData = false;
+                    if (response.StatusCode == HttpStatusCode.OK)
+                    {
+                        responseData = await response.Content.ReadAsAsync<bool>();
+                    }
 
                     if (responseData == true)
                     {

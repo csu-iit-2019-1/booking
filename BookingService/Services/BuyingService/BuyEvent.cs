@@ -44,13 +44,13 @@ namespace BookingService.Services.BuyingService
                     var body = JsonConvert.SerializeObject(hotelData);
                     var response = await _client.PostAsync(eventServiceUrl, new StringContent(body, Encoding.UTF8, "application/json"));
 
-                    var responseData = false;
+                    var responseData = "";
                     if (response.StatusCode == HttpStatusCode.OK)
                     {
-                        responseData = await response.Content.ReadAsAsync<bool>();
+                        responseData = await response.Content.ReadAsStringAsync();
                     }
 
-                    if (responseData == true)
+                    if (responseData == "true")
                     {
                         isBuying = true;
                         _db.Remove(eventKey);

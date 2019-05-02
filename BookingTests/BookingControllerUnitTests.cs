@@ -24,13 +24,11 @@ namespace BookingTests
                 {
                     new HotelDto
                     {
-                        HotelId = 1,
-                        Name = "New Hotel"
+                        HotelId = 1                        
                     },
                     new HotelDto
                     {
-                        HotelId = 2,
-                        Name = "Райское Наслаждение"
+                        HotelId = 2                        
                     }
                 },
                 Transports = new List<TransportDto>()
@@ -44,13 +42,11 @@ namespace BookingTests
                 {
                     new EventDto
                     {
-                        EventId = 1,
-                        Name = "Rock concert"
+                        EventId = 1                        
                     },
                     new EventDto
                     {
-                        EventId = 2,
-                        Name = "Opera"
+                        EventId = 2                        
                     }
                 },
                 CountOfPersonsAdults = 2,

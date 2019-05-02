@@ -106,11 +106,12 @@ namespace BookingService.Models
 
             foreach (EventDto ev in route.Events)
             {
-                var eventUrl = BookingServiceUrls.EVENT_URL + ev.EventId.ToString();
+                var eventUrl = BookingServiceUrls.EVENT_URL;
 
                 var data = new BookingEventDto
                 {
                     userId = route.PersonId,
+                    eventId = ev.EventId,
                     countOfPersonsAdults = route.CountOfPersonsAdults,
                     countOfPersonsChildren = route.CountOfPersonsChildren
                 };

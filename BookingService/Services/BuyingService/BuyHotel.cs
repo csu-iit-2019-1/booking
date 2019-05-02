@@ -37,19 +37,20 @@ namespace BookingService.Services.BuyingService
                     var hotelServiceUrl = BuyingServiceUrls.HOTEL_URL;
                     var hotelData = new HotelDto()
                     {
-                        bookingId = id
+                        BookingId = id
                     };
 
                     var body = JsonConvert.SerializeObject(hotelData);
                     var response = await _client.PutAsync(hotelServiceUrl, new StringContent(body, Encoding.UTF8, "application/json"));
 
-                    var responseData = "";
+                    var responseData = false;
                     if (response.StatusCode == HttpStatusCode.OK)
                     {
-                        responseData = await response.Content.ReadAsStringAsync();
+                        dynamic a = JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync());
+                        responseData = a.status;
                     }
 
-                    if (responseData == "Buyoted")
+                    if (responseData == true)
                     {
                         isBuying = true;
                         _db.Remove(hotelKey);

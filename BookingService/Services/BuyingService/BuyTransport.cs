@@ -46,7 +46,8 @@ namespace BookingService.Services.BuyingService
                     var responseData = false;
                     if (response.StatusCode == HttpStatusCode.OK)
                     {
-                        responseData = await response.Content.ReadAsAsync<bool>();
+                        dynamic a = JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync());
+                        responseData = a.status;
                     }
 
                     if (responseData == true)
